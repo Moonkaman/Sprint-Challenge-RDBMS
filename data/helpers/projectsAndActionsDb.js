@@ -25,7 +25,7 @@ function get(table) {
 }
 
 function getById(table, id) {
-  return db(table).where({id: id});
+  return db(table).where({id: id}).first();
 }
 
 function post(table, item) {
