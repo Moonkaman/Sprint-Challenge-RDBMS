@@ -2,6 +2,9 @@ const db = require('../dbConfig');
 
 module.exports = {
   getProject,
+  get,
+  getById,
+  post
 }
 
 function getProject(id) {
@@ -12,5 +15,18 @@ function getProject(id) {
           return {...project, actions}
         })
     })
+}
+
+function get(table) {
+  return db(table);
+}
+
+function getById(table, id) {
+  return db(table).where({id: id});
+}
+
+function post(table, item) {
+  return db(table).insert(item)
+    .then(id => db.getById(table, id[0]))
 }
 
