@@ -56,4 +56,10 @@ router.put('/:id', (req, res) => {
   }
 })
 
+router.delete('/:id', (req, res) => {
+  db.remove(table, req.params.id)
+    .then(count => count > 0 ? res.status(204).end() : res.status(404).json({errorMessage: 'The Project you tried to delete could not be found.'}))
+    .catch(err => res.status(500).json({errorMessage: 'Could not delete the project with the specified id at this time', error: err}))
+})
+
 module.exports = router;
