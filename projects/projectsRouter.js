@@ -24,4 +24,18 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({errorMessage: 'Could not retrieve the list of projects at this time', error: err}))
 })
 
+router.post('/', (req, res) => {
+  if(req.body.name !== undefined && req.body.completed !== undefined){
+    db.post(table, req.body)
+      .then(id => {
+        db.getProject(id[0])
+          .then(newProject => res.status(201).json(newProject))
+          .catch(err => res.status(500).json({errorMessage: 'Could not retrieve the new project at this time', error: err}))
+      })
+      .catch(err => res.status(500).json({errorMessage: 'Could not create a project at this time', error: err}))
+  } else {
+    res.status(400).json({errorMessage: `Please provide${!req.body.name ? ' a name' : ''}${!req.body.name && req.body.completed === undefined ?' and' : ''}${req.body.completed === undefined ? ' a completed flag.' : ''}`})
+  }
+})
+
 module.exports = router;

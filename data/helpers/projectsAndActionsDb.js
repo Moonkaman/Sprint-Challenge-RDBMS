@@ -8,6 +8,7 @@ module.exports = {
 }
 
 function getProject(id) {
+  console.log(id)
   return db('projects').where({id: id}).first()
     .then(project => {
       return db('actions').where({project_id: id})
@@ -26,7 +27,6 @@ function getById(table, id) {
 }
 
 function post(table, item) {
-  return db(table).insert(item)
-    .then(id => db.getById(table, id[0]))
+  return db(table).insert(item);
 }
 
