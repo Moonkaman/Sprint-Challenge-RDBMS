@@ -4,7 +4,8 @@ module.exports = {
   getProject,
   get,
   getById,
-  post
+  post,
+  update
 }
 
 function getProject(id) {
@@ -28,5 +29,9 @@ function getById(table, id) {
 
 function post(table, item) {
   return db(table).insert(item);
+}
+
+function update(table, id, item) {
+  return db(table).where({id: id}).update(item);
 }
 
