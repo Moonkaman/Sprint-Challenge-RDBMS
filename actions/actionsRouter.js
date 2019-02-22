@@ -38,4 +38,22 @@ router.post('/', (req, res) => {
   }
 })
 
+router.put('/:id', (req, res) => {
+  if(req.body.description !== undefined && req.body.completed !== undefined && req.body.project_id !== undefined){
+    db.update(table, req.params.id, req.body)
+      .then(count => {
+        if(count > 0) {
+          db.getById(table, req.params.id)
+            .then(action => res.status(200).json(action))
+            .catch(err => res.status(500).json({errorMessage: 'Could not retrieve the updated action at this time', error: err}));
+        } else {
+          res.status(404).json({errorMessage: 'The action you tried to update could not be found.'})
+        }
+      })
+      .catch(err => res.status(500).json({errorMessage: 'Could not update the action with the specified ID at this time', error: err}))
+  } else {
+    res.status(400).json({errorMessage: `Please provide${!req.body.description ? ' a description' : ''}${!req.body.description && req.body.completed === undefined || !req.body.description && req.body.project_id === undefined || req.body.project_id === undefined && req.body.completed === undefined  ?' and ' : ''}${req.body.completed === undefined ? ' a completed flag ' : ''}${req.body.completed === undefined && req.body.description === undefined && req.body.project_id === undefined ? 'and ' : ''}${req.body.project_id === undefined ? 'a valid project ID' : ''}.`});
+  }
+})
+
 module.exports = router;
